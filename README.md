@@ -49,20 +49,20 @@ You only download the framework you actually use.
 use std::time::Duration;
 use ws_heartbeat::prelude::*;
 
-// 1. Create the registry once. K is your id type, S is the session type.
+//  Create the registry once. K is your id type, S is the session type.
 let registry: HeartbeatRegistry<uuid::Uuid, ActixSession> = HeartbeatRegistry::new();
 
-// 2. Start the guard once, at startup.
-//    Check every 5 seconds, close anyone silent for 15 seconds.
+//  Start the guard once, at startup.
+//  Check every 5 seconds, close anyone silent for 15 seconds.
 registry.spawn_sweeper(Duration::from_secs(5), Duration::from_secs(15));
 
-// 3. When a client connects:
+//  When a client connects:
 registry.register(id, ActixSession(session.clone()));
 
-// 4. When a pong (or any message) arrives:
+//  When a pong (or any message) arrives:
 registry.touch(&id);
 
-// 5. When the connection ends:
+//  When the connection ends:
 registry.remove(&id);
 ```
 
